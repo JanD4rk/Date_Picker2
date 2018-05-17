@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="month_0">Янв</string>
+    <string name="month_1">Фев</string>
+    <string name="month_2">Мар</string>
+    <string name="month_3">Апр</string>
+    <string name="month_4">Мая</string>
+    <string name="month_5">Июн</string>
+    <string name="month_6">Июл</string>
+    <string name="month_7">Авг</string>
+    <string name="month_8">Сен</string>
+    <string name="month_9">Окт</string>
+    <string name="month_10">Ноя</string>
+    <string name="month_11">Дек</string>
+    <string name="back_today">Назад к сегодняшнему дню</string>
+</resources>

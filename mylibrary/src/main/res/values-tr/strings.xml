@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="month_0">Oca</string>
+    <string name="month_1">Şub</string>
+    <string name="month_2">Mar</string>
+    <string name="month_3">Nis</string>
+    <string name="month_4">May</string>
+    <string name="month_5">Haz</string>
+    <string name="month_6">Tem</string>
+    <string name="month_7">Ağu</string>
+    <string name="month_8">Eyl</string>
+    <string name="month_9">Eki</string>
+    <string name="month_10">Kas</string>
+    <string name="month_11">Ara</string>
+    <string name="back_today">Bugüne dönüş</string>
+</resources>

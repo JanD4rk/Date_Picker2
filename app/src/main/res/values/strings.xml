@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">CalendarIos</string>
+    <string name="month_0">Jan</string>
+    <string name="month_1">Feb</string>
+    <string name="month_2">Mar</string>
+    <string name="month_3">Apr</string>
+    <string name="month_4">May</string>
+    <string name="month_5">Jun</string>
+    <string name="month_6">Jul</string>
+    <string name="month_7">Aug</string>
+    <string name="month_8">Sep</string>
+    <string name="month_9">Oct</string>
+    <string name="month_10">Nov</string>
+    <string name="month_11">Dec</string>
+</resources>
