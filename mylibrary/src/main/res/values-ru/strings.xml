@@ -12,5 +12,5 @@
     <string name="month_9">Окт</string>
     <string name="month_10">Ноя</string>
     <string name="month_11">Дек</string>
-    <string name="back_today">Назад к сегодняшнему дню</string>
+    <string name="back_today">Текущая дата</string>
 </resources>

@@ -12,5 +12,5 @@
     <string name="month_9">Жовт</string>
     <string name="month_10">Лист</string>
     <string name="month_11">Груд</string>
-    <string name="back_today">Назад до сьогодні</string>
+    <string name="back_today">Поточна  дата</string>
 </resources>
