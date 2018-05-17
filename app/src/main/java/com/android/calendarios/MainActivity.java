@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //
-//
+//s
 //        android.widget.DatePicker datePicker= findViewById(R.id.datepickertest);
 //        datePicker.setSpinnersShown(false);
         findViewById(R.id.datepickertest).setOnClickListener(new View.OnClickListener() {
