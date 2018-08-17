@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:background="#01a0e4"
     android:layout_height="wrap_content">
-<LinearLayout
+
+    <LinearLayout
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:weightSum="2"
@@ -74,22 +75,11 @@
 
 </LinearLayout>
 
-    <TextView
-        android:layout_below="@+id/toolbar"
-        android:id="@+id/back_today"
-        android:layout_width="match_parent"
-        android:layout_margin="6dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:text="@string/back_today"
-        android:textColor="#FFF"
-        android:textStyle="bold"
-        android:textSize="24sp"
-       />
     <RelativeLayout
+        android:layout_marginTop="2dp"
+        android:id="@+id/pickers"
         android:layout_width="match_parent"
-        android:layout_below="@+id/back_today"
+        android:layout_below="@+id/toolbar"
         android:layout_height="wrap_content">
     <View
         android:layout_width="match_parent"
@@ -102,6 +92,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:weightSum="3"
+
         android:layout_height="wrap_content">
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/np_years"
@@ -141,5 +132,17 @@
     </LinearLayout>
     </RelativeLayout>
 
+
+    <TextView
+        android:id="@+id/back_today"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_below="@+id/pickers"
+        android:background="#388e3c"
+        android:gravity="center"
+        android:text="@string/back_today"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
