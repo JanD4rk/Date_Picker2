@@ -1,14 +1,13 @@
 package com.android.mylibrary;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Paint;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.RequiresApi;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -22,62 +21,132 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by JanD4rk on 12/29/2017 4:11 PM .
  */
 
 public class LibraryDialog extends FrameLayout {
+    private static final int START_YEAR = 1990;
     NumberPicker day, month, year;
     List<String> listYears;
     String[] months;
     RelativeLayout confirm, cancel;
-    View main, divider,toolbar;
+    View main, divider, toolbar, buttonDivider;
     String[] years;
-    TextView backToday,cancelTv,confirmTv;
+    TextView backToday, cancelTv, confirmTv;
     boolean isSpinning1 = true, isSpinning3 = true, isSpinning2 = true;
     boolean todayPressed = false;
     Integer mainColor, dividerColor, textColor;
     Calendar calendar;
     TextPaint paint;
     ConfirmListener confirmListener;
-    OnClickListener cancelClickListener;
     CancelListener cancelListener;
-    Integer selectedDay;
-    private static final int START_YEAR = 1990;
+    BackTodayListener backTodayListener;
+    private OnClickListener backButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            todayPressed = true;
+            if (isSpinning1 & isSpinning2 & isSpinning3) {
+                Calendar calendar = Calendar.getInstance();
+                int thisYear = calendar.get(Calendar.YEAR);
+                int thisMonth = calendar.get(Calendar.MONTH);
+                int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-    public interface ConfirmListener {
-        void onConfirm(int year, int month, int day);
-    }
+                int monthDayCount = getMonthDays(thisYear, thisMonth + 1);
+                month.setValue(thisMonth + 1);
+                year.setValue(year.getMaxValue() - 1);
+                day.setMaxValue(monthDayCount);
+                day.setValue(thisDay);
+                todayPressed = false;
+                if (backTodayListener != null)
+                    backTodayListener.onBackPressed();
+            }
 
-    interface CancelListener {
-        void onCancel();
-    }
+
+        }
+    };
+    /**
+     * Number Picker listeners
+     */
+    private NumberPicker.OnValueChangeListener monthListener = new NumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
+            int selectedYear = Integer.valueOf(years[year.getValue() - 1]);
+            int selectedDay = getMonthDays(selectedYear, newVal);
+            int oldDay = day.getValue();
+            day.setMaxValue(selectedDay);
+            day.setValue(getSelectedDayValue(selectedDay, oldDay));
+
+        }
+    };
+    private NumberPicker.OnValueChangeListener yearListener = new NumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
+            int selectedYear = Integer.valueOf(years[year.getValue() - 1]);
+            int selectedDay = getMonthDays(selectedYear, month.getValue());
+            int oldDay = day.getValue();
+
+            day.setMaxValue(selectedDay);
+            day.setValue(getSelectedDayValue(selectedDay, oldDay));
+
+        }
+    };
+    private View.OnClickListener cancelButtonClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (cancelListener != null) {
+                cancelListener.onCancel();
+            }
+        }
+    };
+
+    private View.OnClickListener confirmButtonClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (confirmListener != null) {
+
+                long start = calendar.getTimeInMillis();
+                calendar.set(year.getValue() + 1989, month.getValue() - 1, day.getValue());
+                long end = calendar.getTimeInMillis();
+
+                long diff=TimeUnit.MILLISECONDS.toDays(end - start);
+
+                confirmListener.onConfirm(year.getValue() + 1989, month.getValue() - 1, day.getValue());
+                confirmListener.onConfirm(diff);
+                confirmListener.onConfirm(calendar);
+            }
+        }
+    };
 
     public LibraryDialog(@NonNull Context context) {
 
         super(context);
-        onCreate(null);
+        onCreate();
     }
 
     public LibraryDialog(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        onCreate(attrs);
+        onCreate();
     }
 
     public LibraryDialog(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        onCreate(attrs);
+        onCreate();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public LibraryDialog(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        onCreate(attrs);
+        onCreate();
     }
 
+    public void setBackTodayListener(BackTodayListener backTodayListener) {
+        this.backTodayListener = backTodayListener;
+    }
 
-    private void onCreate(AttributeSet attributeSet) {
+    private void onCreate() {
         paint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
         LayoutInflater.from(getContext()).inflate(R.layout.main_layout, this);
         listYears = new ArrayList<>();
@@ -89,21 +158,11 @@ public class LibraryDialog extends FrameLayout {
         cancel = findViewById(R.id.cancel);
         main = findViewById(R.id.main_layout);
         divider = findViewById(R.id.divider);
-        toolbar=findViewById(R.id.toolbar);
-        cancelTv=findViewById(R.id.cancel_text);
-        confirmTv=findViewById(R.id.confirm_text);
-        setColors(mainColor,dividerColor,textColor);
-
-        TypedArray ta = getContext().obtainStyledAttributes(attributeSet, R.styleable.LibraryDialog);
-        if (ta != null) {
-
-            float f = ta.getDimension(R.styleable.LibraryDialog_fontSize, 10f);
-            if (f != 10f) {
-                //test
-//                  day.setSelectedTextSize(f);
-            }
-
-        }
+        buttonDivider = findViewById(R.id.buttonDivider);
+        toolbar = findViewById(R.id.toolbar);
+        cancelTv = findViewById(R.id.cancel_text);
+        confirmTv = findViewById(R.id.confirm_text);
+        setColors(mainColor, dividerColor, textColor);
 
 
         calendar = Calendar.getInstance();
@@ -184,7 +243,11 @@ public class LibraryDialog extends FrameLayout {
             month.setValue(calendar.get(Calendar.MONTH) + 1);
             day.setMaxValue(getMonthDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1));
             day.setValue(calendar.get(Calendar.DAY_OF_MONTH));
+
+            this.calendar.setTimeInMillis(millis);
+
         }
+
 
     }
 
@@ -213,68 +276,16 @@ public class LibraryDialog extends FrameLayout {
             if (main != null) {
                 main.setBackgroundColor(mainColor);
                 toolbar.setBackgroundColor(mainColor);
-            }
-            else this.mainColor = mainColor;
+            } else this.mainColor = mainColor;
 
         if (dividerColor != null)
-            if (divider != null)
+            if (divider != null) {
                 divider.setBackgroundColor(dividerColor);
-            else this.dividerColor=dividerColor;
+                buttonDivider.setBackgroundColor(dividerColor);
+            } else this.dividerColor = dividerColor;
 
 
     }
-
-    private OnClickListener backButtonListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            todayPressed = true;
-            if (isSpinning1 & isSpinning2 & isSpinning3) {
-                Calendar calendar = Calendar.getInstance();
-                int thisYear = calendar.get(Calendar.YEAR);
-                int thisMonth = calendar.get(Calendar.MONTH);
-                int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
-
-                int monthDayCount = getMonthDays(thisYear, thisMonth + 1);
-                month.setValue(thisMonth + 1);
-                year.setValue(year.getMaxValue() - 1);
-                day.setMaxValue(monthDayCount);
-                day.setValue(thisDay);
-                todayPressed = false;
-            }
-
-
-        }
-    };
-    /**
-     * Number Picker listeners
-     */
-    private NumberPicker.OnValueChangeListener monthListener = new NumberPicker.OnValueChangeListener() {
-        @Override
-        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
-            int selectedYear = Integer.valueOf(years[year.getValue() - 1]);
-            int selectedDay = getMonthDays(selectedYear, newVal);
-            int oldDay = day.getValue();
-            day.setMaxValue(selectedDay);
-            day.setValue(getSelectedDayValue(selectedDay, oldDay));
-
-        }
-    };
-
-    private NumberPicker.OnValueChangeListener yearListener = new NumberPicker.OnValueChangeListener() {
-        @Override
-        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
-            int selectedYear = Integer.valueOf(years[year.getValue() - 1]);
-            int selectedDay = getMonthDays(selectedYear, month.getValue());
-            int oldDay = day.getValue();
-
-            day.setMaxValue(selectedDay);
-            day.setValue(getSelectedDayValue(selectedDay, oldDay));
-
-        }
-    };
-
 
     private int getMonthDays(int year, int month) {
         int a = 0;
@@ -326,29 +337,9 @@ public class LibraryDialog extends FrameLayout {
         return (monthDays >= oldDay ? oldDay : monthDays);
     }
 
-    private View.OnClickListener cancelButtonClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (cancelListener != null) {
-                cancelListener.onCancel();
-            }
-        }
-    };
-
-    private View.OnClickListener confirmButtonClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (confirmListener != null) {
-                confirmListener.onConfirm(year.getValue(), month.getValue(), day.getValue());
-            }
-        }
-    };
-
-
     public void setOnCancelListener(CancelListener cancelListener) {
         this.cancelListener = cancelListener;
     }
-
 
     public void setOnConfirmListener(ConfirmListener confirmListener) {
         this.confirmListener = confirmListener;
@@ -356,5 +347,29 @@ public class LibraryDialog extends FrameLayout {
 
     private float pxToSp(float px) {
         return px / getResources().getDisplayMetrics().scaledDensity;
+    }
+
+
+    public interface BackTodayListener {
+        void onBackPressed();
+    }
+
+
+    interface CancelListener {
+        void onCancel();
+    }
+
+    public abstract class ConfirmListener {
+        void onConfirm(int year, int month, int day) {
+
+        }
+
+        void onConfirm(long difference) {
+
+        }
+
+        void onConfirm(Calendar calendar) {
+
+        }
     }
 }

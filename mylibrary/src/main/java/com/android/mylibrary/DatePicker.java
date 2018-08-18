@@ -9,6 +9,8 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import java.util.Calendar;
+
 /**
  * Created by JanD4rk on 1/8/2018 10:17 AM .
  */
@@ -17,7 +19,7 @@ public class DatePicker  {
     Dialog dialog;
     LibraryDialog libraryDialog;
     LibraryDialog.ConfirmListener mylistener;
-    public DatePicker(@NonNull Context context,Integer selectedDay) {
+    public DatePicker(@NonNull Context context,Calendar selectedCalendar) {
         dialog=new Dialog(context,R.style.DateDialogTheme);
 
         Window dialogWindow;
@@ -31,13 +33,14 @@ public class DatePicker  {
         dialog.setContentView(R.layout.dialog_layout);
 
         libraryDialog= dialog.findViewById(R.id.myDialog);
-        libraryDialog.setSelectedDay(selectedDay);
         libraryDialog.setOnCancelListener(new LibraryDialog.CancelListener() {
             @Override
             public void onCancel() {
                 dialog.dismiss();
             }
         });
+
+
         dialog.show();
     }
     public void  dismiss(){
@@ -50,6 +53,10 @@ public class DatePicker  {
     public void setConfirmListener(LibraryDialog.ConfirmListener listener){
         libraryDialog.setOnConfirmListener(listener);
     }
+    public void setBackTodayListener(LibraryDialog.BackTodayListener listener){
+        libraryDialog.setBackTodayListener(listener);
+    }
+
     public  void  setColors(Integer mainColor,Integer dividerColor,Integer textColor){
         libraryDialog.setColors(mainColor,dividerColor,textColor);
     }
