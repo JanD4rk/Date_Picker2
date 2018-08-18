@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -37,7 +38,6 @@ public class LibraryDialog extends FrameLayout {
     boolean todayPressed = false;
     Integer mainColor, dividerColor, textColor;
     Calendar calendar;
-    TextPaint paint;
     ConfirmListener confirmListener;
     CancelListener cancelListener;
     BackTodayListener backTodayListener;
@@ -146,7 +146,6 @@ public class LibraryDialog extends FrameLayout {
     }
 
     private void onCreate() {
-        paint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
         LayoutInflater.from(getContext()).inflate(R.layout.main_layout, this);
         listYears = new ArrayList<>();
         confirm = findViewById(R.id.confirm);
@@ -353,16 +352,26 @@ public class LibraryDialog extends FrameLayout {
         void onCancel();
     }
 
-    public static abstract class ConfirmListener {
-        void onConfirm(int year, int month, int day) {
+    interface ConfirmsListener {
+        void onConfirm(int year, int month, int day);
+
+        void onConfirm(long difference);
+
+        void onConfirm(Calendar calendar);
+    }
+
+    public static abstract class ConfirmListener implements  ConfirmsListener {
+        @Override
+        public void onConfirm(int year, int month, int day) {
+        }
+
+        @Override
+        public void onConfirm(long difference) {
 
         }
 
-        void onConfirm(long difference) {
-
-        }
-
-        void onConfirm(Calendar calendar) {
+        @Override
+        public void onConfirm(Calendar calendar) {
 
         }
     }

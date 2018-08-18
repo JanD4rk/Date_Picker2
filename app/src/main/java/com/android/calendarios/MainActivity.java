@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.android.mylibrary.DatePicker;
+import com.android.mylibrary.LibraryDialog;
+
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,10 +24,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatePicker datePicker= new DatePicker(MainActivity.this,0);
-        }});
+
+                datePicker.setConfirmListener(new LibraryDialog.ConfirmListener() {
+                    @Override
+                    public void onConfirm(int year, int month, int day) {
+                        super.onConfirm(year, month, day);
+                    }
+
+                    @Override
+                    public void onConfirm(long difference) {
+                        super.onConfirm(difference);
+                    }
+
+                    @Override
+                    public void onConfirm(Calendar calendar) {
+                        super.onConfirm(calendar);
+                    }
+                })
+            ;
 //
 
 
 
+    }});
+
     }
+
 }
+
