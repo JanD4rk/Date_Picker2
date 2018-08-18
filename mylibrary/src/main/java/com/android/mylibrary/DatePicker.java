@@ -19,7 +19,7 @@ public class DatePicker  {
     private Dialog dialog;
     private LibraryDialog libraryDialog;
     private LibraryDialog.ConfirmListener mylistener;
-    public DatePicker(@NonNull Context context,int selectedCalendar) {
+    public DatePicker(@NonNull Context context,Integer selectedCalendar) {
         dialog=new Dialog(context,R.style.DateDialogTheme);
 
         Window dialogWindow;
