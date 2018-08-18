@@ -16,10 +16,10 @@ import java.util.Calendar;
  */
 
 public class DatePicker  {
-    Dialog dialog;
-    LibraryDialog libraryDialog;
-    LibraryDialog.ConfirmListener mylistener;
-    public DatePicker(@NonNull Context context,Calendar selectedCalendar) {
+    private Dialog dialog;
+    private LibraryDialog libraryDialog;
+    private LibraryDialog.ConfirmListener mylistener;
+    public DatePicker(@NonNull Context context,int selectedCalendar) {
         dialog=new Dialog(context,R.style.DateDialogTheme);
 
         Window dialogWindow;

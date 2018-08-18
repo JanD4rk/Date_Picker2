@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class LibraryDialog extends FrameLayout {
-    private static final int START_YEAR = 1990;
     NumberPicker day, month, year;
     List<String> listYears;
     String[] months;
@@ -178,10 +177,8 @@ public class LibraryDialog extends FrameLayout {
             months[aa] = getContext().getResources().getString(getResources().getIdentifier(statusName, "string", getContext().getPackageName()));
             aa++;
         }
-        ;
 
-//
-//
+
 
         years = new String[a];
         for (int b = 0; b < a; b++) {
@@ -345,9 +342,6 @@ public class LibraryDialog extends FrameLayout {
         this.confirmListener = confirmListener;
     }
 
-    private float pxToSp(float px) {
-        return px / getResources().getDisplayMetrics().scaledDensity;
-    }
 
 
     public interface BackTodayListener {
@@ -359,7 +353,7 @@ public class LibraryDialog extends FrameLayout {
         void onCancel();
     }
 
-    public abstract class ConfirmListener {
+    public static abstract class ConfirmListener {
         void onConfirm(int year, int month, int day) {
 
         }
