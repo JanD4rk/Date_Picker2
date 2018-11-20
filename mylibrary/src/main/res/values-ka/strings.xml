@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">library</string>
+  <string name="confirm">დასტური</string>
+  <string name="cancel">გაუქმება</string>
+  <string name="month_0">იანვ</string>
+  <string name="month_1">თებ</string>
+  <string name="month_2">მარ</string>
+  <string name="month_3">აპრ</string>
+  <string name="month_4">მაის</string>
+  <string name="month_5">ივნ</string>
+  <string name="month_6">ივლ</string>
+  <string name="month_7">აგვ</string>
+  <string name="month_8">სექტ</string>
+  <string name="month_9">ოქტ</string>
+  <string name="month_10">ნოემბ</string>
+  <string name="month_11">დეკ</string>
+  <string name="back_today">დღეს</string>
+</resources>
